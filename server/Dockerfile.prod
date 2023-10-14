@@ -12,7 +12,10 @@ ENV COMPOSER_HOME /composer
 EXPOSE 8080
 COPY . /var/www/
 COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
-RUN composer install
 RUN chmod 777 -R /var/www/storage/ && \
     echo "Listen 8080" >> /etc/apache2/ports.conf  && \
     a2enmod rewrite
+
+RUN chmod +x /var/www/sh/laravel.prod.sh
+
+ENTRYPOINT ["/var/www/sh/laravel.prod.sh"]
