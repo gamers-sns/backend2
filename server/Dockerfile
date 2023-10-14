@@ -4,6 +4,7 @@ WORKDIR /var/www/
 
 RUN apt-get update && apt-get install -y \
     libzip-dev \
+    libpq-dev \
     && docker-php-ext-install zip pdo_pgsql
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
