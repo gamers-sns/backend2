@@ -3,13 +3,13 @@ name: laravel deploy dev
 on:
   push:
     branches:
-      - "develop"
+      - "main"
 
 env:
   GCP_REGION: asia-northeast1
   IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/laravel-dev:${{ github.sha }}
   GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-  DOCKER_FILE_PATH: ./server/Dockerfile
+  DOCKER_FILE_PATH: ./server/Dockerfile.prod
   SERVICE_NAME: laravel-dev
 
 jobs:
