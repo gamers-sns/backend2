@@ -13,6 +13,8 @@ services:
       DB_DATABASE: laravel
       DB_USERNAME: root
       DB_PASSWORD: root
+    volumes:
+      - ./server:/var/www/
   db:
     image: postgres:latest
     ports:
