@@ -7,9 +7,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DB_CONNECTION: postgres
+      DB_CONNECTION: pgsql
       DB_HOST: db
-      DB_PORT: 3306
+      DB_PORT: 5432
       DB_DATABASE: laravel
       DB_USERNAME: root
       DB_PASSWORD: root
