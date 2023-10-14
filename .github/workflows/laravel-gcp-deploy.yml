@@ -1,0 +1,37 @@
+name: laravel deploy dev
+
+on:
+  push:
+    branches:
+      - "develop"
+
+env:
+  GCP_REGION: asia-northeast1
+  IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/laravel-dev:${{ github.sha }}
+  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+  DOCKER_FILE_PATH: ./server/Dockerfile
+  SERVICE_NAME: laravel-dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+      - id: "auth"
+        uses: "google-github-actions/auth@v0"
+        with:
+          credentials_json: "${{ env.GCP_CREDENTIALS }}"
+      - name: Configure docker to use the gcloud cli
+        run: gcloud auth configure-docker --quiet
+      - name: Build a docker image
+        run: docker build -t ${{ env.IMAGE }} -f ${{ env.DOCKER_FILE_PATH }} server
+      - name: Push the docker image
+        run: docker push ${{ env.IMAGE }}
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: ${{ env.SERVICE_NAME }}
+          image: ${{ env.IMAGE }}
+          region: ${{ env.GCP_REGION }}
